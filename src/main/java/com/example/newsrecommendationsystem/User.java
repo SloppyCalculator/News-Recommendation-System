@@ -7,18 +7,39 @@ import java.util.UUID;
 
 
 public class User implements Users{
-    private String userID;
+    private int userID;
     private String username;
     private String passwordHash;
     private static final String SALT = "RandomSaltForSecurity";
-    private ArrayList<AbstractArticle> readArticles = new ArrayList<>();
-    private ArrayList<AbstractArticle> likedArticles = new ArrayList<>();
-    private ArrayList<AbstractArticle> skippedArticles = new ArrayList<>();
+    private ArrayList<Article> readArticles = new ArrayList<>();
+    private ArrayList<Article> likedArticles = new ArrayList<>();
+    private ArrayList<Article> skippedArticles = new ArrayList<>();
+    private ArrayList<String> preferences = new ArrayList<>();
+    private DatabaseManager connector;
 
     public User(String username, String password) {
-        this.userID = UUID.randomUUID().toString();
         this.username = username;
         this.passwordHash = hashPassword(password);
+    }
+
+    public User(String username, String password, String state) {
+        this.username = username;
+        this.passwordHash = password;
+    }
+
+    public User(String username, String password, ArrayList<String> preferences) {
+        this.username = username;
+        this.passwordHash = hashPassword(password);
+        this.preferences = preferences;
+    }
+
+
+
+    public User(int id, String username, String password, ArrayList<String> preferences){
+        this.userID = id;
+        this.username = username;
+        this.passwordHash = password;
+        this.preferences = preferences;
     }
 
     private String hashPassword(String password) {
@@ -39,19 +60,13 @@ public class User implements Users{
     }
 
     @Override
-    public void Login(String username, String password) {
-
-
-    }
-
-    @Override
     public String getUsername() {
         return username;
     }
 
     @Override
     public String getPassword() {
-        throw new UnsupportedOperationException("Access to raw password is not allowed.");
+        return passwordHash;
     }
 
     public boolean verifyPassword(String password) {
@@ -59,42 +74,63 @@ public class User implements Users{
         return hashedInput.equals(passwordHash); // Compare with stored hash
     }
 
-    public ArrayList<AbstractArticle> getReadArticles() {
+    public ArrayList<Article> getReadArticles() {
         return readArticles;
     }
 
-    public ArrayList<AbstractArticle> getLikedArticles() {
+    public ArrayList<Article> getLikedArticles() {
         return likedArticles;
     }
 
-    public ArrayList<AbstractArticle> getSkippedArticles() {
+    public ArrayList<Article> getSkippedArticles() {
         return skippedArticles;
     }
 
-    public void addReadArticle(AbstractArticle article) {
+    public void addReadArticle(Article article) {
         if (!readArticles.contains(article)) {
             readArticles.add(article);
         }
     }
 
-    public void addLikedArticle(AbstractArticle article) {
+    public void addLikedArticle(Article article) {
         if (!likedArticles.contains(article)) {
             likedArticles.add(article);
         }
     }
 
-    public void addSkippedArticle(AbstractArticle article) {
+    public void addSkippedArticle(Article article) {
         if (!skippedArticles.contains(article)) {
             skippedArticles.add(article);
         }
     }
 
-    public void removeLikedArticle(AbstractArticle article) {
+    public void removeLikedArticle(Article article) {
         likedArticles.remove(article);
+    }
+
+    public void addPreference(String preference){
+        preferences.add(preference);
+    }
+
+    public ArrayList<String> getPreferences(){
+        return preferences;
     }
 
     @Override
     public String toString() {
         return "User{userID='" + userID + "', username='" + username + "'}";
     }
+
+    public void changeUsername(String username){
+        this.username = username;
+    }
+
+    public void changePassword(String password){
+        this.passwordHash = hashPassword(password);
+
+    }
+    public int getUserID(){
+        return userID;
+    }
 }
+

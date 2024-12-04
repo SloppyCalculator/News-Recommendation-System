@@ -13,7 +13,6 @@
     -fx-font-family: "Inter UI", "SF Pro Display", "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
     -fx-font-size: 16px;
     -fx-font-weight: 500;
-    -fx-pref-height: 4rem;
     -fx-padding: 0 1.6rem;
     -fx-text-alignment: center;
     -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.25), 8, 0, 0, 3);
@@ -32,3 +31,53 @@
         -fx-padding: 0 2.6rem;
     }
 }
+
+.button-submit {
+    -fx-background-color: #4CAF50; /* Green */
+    -fx-text-fill: white; /* Text color */
+    -fx-padding: 10 20;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-border-radius: 25;
+    -fx-background-radius: 25;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0, 0, 4);
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s ease;
+}
+
+.button-submit:hover {
+    -fx-background-color: #45a049; /* Darker green */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 0, 8);
+}
+
+.button-submit:pressed {
+    -fx-background-color: #3e8e41; /* Even darker green */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 3, 0, 0, 3);
+}
+
+.skip-button {
+    -fx-background-color: #2196F3; /* Blue */
+    -fx-text-fill: white; /* Text color */
+    -fx-padding: 10 20;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-border-radius: 25;
+    -fx-background-radius: 25;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0, 0, 4);
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s ease;
+}
+
+.skip-button:hover {
+    -fx-background-color: #1E88E5; /* Darker blue */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 0, 8);
+}
+
+.skip-button:pressed {
+    -fx-background-color: #1565C0; /* Even darker blue */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 3, 0, 0, 3);
+}
+
+
+
+

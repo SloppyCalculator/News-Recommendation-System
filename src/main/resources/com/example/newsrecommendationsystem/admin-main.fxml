@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" styleClass="background" stylesheets="@design.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.newsrecommendationsystem.Controller.AdmInMainController">
+    <children>
+        <VBox alignment="CENTER" layoutX="200.0" layoutY="25.0" prefHeight="517.0" prefWidth="400.0" spacing="20.0">
+            <!-- Title (Admin Label) -->
+            <children>
+                <Label text="Admin" textFill="WHITE">
+                    <font>
+                        <Font name="Apple Symbols" size="28.0" />
+                    </font>
+                </Label>
+
+                <!-- Buttons -->
+                <VBox alignment="CENTER" prefHeight="362.0" prefWidth="402.0" spacing="20.0">
+                    <children>
+                        <Button mnemonicParsing="false" onAction="#onManageUsers" prefWidth="200.0" styleClass="button-36" text="Manage Users" />
+                        <Button mnemonicParsing="false" onAction="#onManageArticles" prefWidth="200.0" styleClass="button-36" text="Manage Articles" />
+                        <Button mnemonicParsing="false" prefWidth="200.0" styleClass="button-36" text="Load Articles" />
+                        <Button mnemonicParsing="false" onAction="#onLogOut" prefWidth="200.0" styleClass="button-36" text="Log Out" />
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </children>
+</Pane>

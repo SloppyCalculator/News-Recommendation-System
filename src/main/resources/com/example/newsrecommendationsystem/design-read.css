@@ -1,0 +1,150 @@
+/* General styling for the application background */
+.background {
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #e8eaf6);
+}
+
+/* Styling for the VBox on the left panel */
+.vbox {
+    -fx-padding: 30px;
+    -fx-background-color: #f5f7fa;
+    -fx-spacing: 20px;
+    -fx-alignment: center;
+    -fx-border-width: 0 1px 0 0;
+    -fx-border-color: #d1d1d1;
+}
+
+/* Styling for the user image */
+.image-view {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0.0, 0, 4);
+    -fx-border-radius: 50%;
+}
+
+/* Styling for the user label */
+.label {
+    -fx-font-family: "Arial";
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+/* Styling for buttons in the left panel */
+.button {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d1d1d1;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-padding: 10px;
+    -fx-text-fill: #34495e;
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #f0f0f0;
+    -fx-border-color: #bdbdbd;
+}
+
+.vbox {
+    -fx-background-color: black;
+}
+
+/* Styling for the central buttons (Recommended Articles and Articles for You) */
+.hbox .button {
+    -fx-background-color: #6c63ff;
+    -fx-text-fill: #ffffff;
+    -fx-padding: 10px 20px;
+    -fx-font-family: "Arial";
+    -fx-font-size: 16px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 4, 0.0, 0, 2);
+}
+
+.hbox .button:hover {
+    -fx-background-color: #5849c1;
+}
+
+.hbox .button:focused {
+    -fx-background-color: #483f8f;
+}
+
+/* Styling for the TableView */
+.table-view {
+    -fx-border-color: #d1d1d1;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8px;
+    -fx-padding: 10px;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #6c63ff;
+}
+
+.table-view .column-header {
+    -fx-font-size: 16px;
+    -fx-font-family: "Arial";
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-alignment: center-left;
+}
+
+/* Alternating row colors for better readability */
+.table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.table-row-cell:even {
+    -fx-background-color: #ffffff;
+}
+
+/* Styling for TableColumn cells */
+.table-cell {
+    -fx-font-size: 14px;
+    -fx-font-family: "Arial";
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 10px;
+    -fx-alignment: center-left;
+}
+
+/* Hover effect for rows in TableView */
+.table-row-cell:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+/* Selected row styling */
+.table-row-cell:selected {
+    -fx-background-color: #6c63ff;
+    -fx-text-fill: #ffffff;
+}
+
+/* Buttons inside TableView (Actions column) */
+.table-view .button-column .button {
+    -fx-background-color: #6c63ff;
+    -fx-text-fill: white;
+    -fx-border-radius: 5px;
+    -fx-font-size: 12px;
+    -fx-padding: 5px 10px;
+    -fx-cursor: hand;
+}
+
+.table-view .button-column .button:hover {
+    -fx-background-color: #5849c1;
+}
+
+.read-button {
+    -fx-background-color: white;
+}
+
+.like-button {
+    -fx-background-color: white;
+
+}
+
+.skip-button {
+    -fx-background-color: white;
+
+}

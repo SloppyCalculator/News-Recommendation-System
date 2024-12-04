@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" styleClass="background" stylesheets="@design.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.newsrecommendationsystem.LoginController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" styleClass="background" stylesheets="@design.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.newsrecommendationsystem.Controller.AdmInMainController">
    <children>
       <VBox alignment="CENTER" layoutX="200.0" layoutY="131.0" prefWidth="400.0" spacing="20.0">
          <!-- Title -->
@@ -29,7 +29,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="usernameField" prefWidth="300.0" promptText="Enter your username" />
+                  <TextField fx:id="usernameField" editable="false" prefWidth="300.0" text="admin" />
                </children>
                <padding>
                   <Insets bottom="0.0" left="20.0" right="20.0" top="0.0" />
@@ -55,13 +55,12 @@
             <!-- Buttons -->
             <HBox alignment="CENTER" prefHeight="79.0" prefWidth="403.0" spacing="20.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#onLogin" prefWidth="120.0" styleClass="button-36" text="Log In" />
+                  <Button mnemonicParsing="false" onAction="#onLoginButtonClick" prefWidth="120.0" styleClass="button-36" text="Log In" />
                   <Button mnemonicParsing="false" onAction="#onCancel" prefWidth="120.0" styleClass="button-36" text="Cancel" />
                </children>
             </HBox>
          </children>
       </VBox>
-      <Button layoutX="516.0" layoutY="42.0" mnemonicParsing="false" onAction="#onSignUpButtonClick" prefWidth="120.0" styleClass="button-36" text="Sign Up" />
       <Button layoutX="655.0" layoutY="42.0" mnemonicParsing="false" onAction="#onBackButtonClick" prefWidth="120.0" styleClass="button-36" text="Back" />
    </children>
 </Pane>
