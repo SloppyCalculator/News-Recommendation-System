@@ -1,5 +1,6 @@
 package com.example.newsrecommendationsystem;
 
+import javafx.scene.control.Alert;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -106,25 +107,32 @@ public class Article {
 
             // Extract the title of the article (optional, can be removed if not needed)
             String title = doc.title();
-            System.out.println("Title: " + title);
+            showAlert(Alert.AlertType.INFORMATION, "Article Title", "Title: " + title);
 
             // Extract the content of the article using the specific attribute
             Elements articleContent = doc.select("div[data-component=text-block]");
 
             // If the article content is found, extract the text
             if (!articleContent.isEmpty()) {
-                // Extract and concatenate text from each block
                 for (Element block : articleContent) {
                     content += block.text() + "\n";
                 }
             } else {
-                System.out.println("Article content not found.");
+                showAlert(Alert.AlertType.WARNING, "Missing Content", "Article content not found.");
             }
         } catch (IOException e) {
-            System.out.println("Error while scraping the article: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Scraping Error", "Error while scraping the article: " + e.getMessage());
         }
 
         return content;
+    }
+
+    private static void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
 

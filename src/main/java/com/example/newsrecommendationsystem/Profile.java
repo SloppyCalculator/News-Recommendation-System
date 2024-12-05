@@ -1,6 +1,6 @@
 package com.example.newsrecommendationsystem;
 
-public interface Users {
+public interface Profile {
     String getUsername();
     String getPassword();
     boolean verifyPassword(String password);

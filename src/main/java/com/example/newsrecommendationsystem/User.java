@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 
-public class User implements Users{
+public class User implements Profile{
     private int userID;
     private String username;
     private String passwordHash;

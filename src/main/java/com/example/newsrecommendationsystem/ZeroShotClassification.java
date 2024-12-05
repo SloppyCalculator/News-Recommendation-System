@@ -13,6 +13,7 @@ public class ZeroShotClassification {
     private static final String API_TOKEN = "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";
 
 
+    
     public static String categorizeDescription(String description) {
         String[] candidateLabels = {"technology", "sports", "politics", "entertainment", "health",
                 "business", "lifestyle", "education"};
