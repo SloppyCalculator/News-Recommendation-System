@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 public class DatabaseManager {
     private static final String URL = "jdbc:sqlite:user-article.db";
 
+    // Get connection to the database
     public static Connection connect() {
         try {
             // Connect to SQLite database

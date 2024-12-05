@@ -116,6 +116,8 @@ public class SignUpController {
         stage.show();
     }
 
+
+    // Handles validation during signing up
     public void onSignUpButtonClick(ActionEvent event) throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
@@ -146,6 +148,7 @@ public class SignUpController {
 
     }
 
+    // Adds all preferences to a list to be stored in the database
     public void onSubmitButton(ActionEvent event) throws IOException {
         // Extract user credentials from the file
         User user = extractUserFromFile();

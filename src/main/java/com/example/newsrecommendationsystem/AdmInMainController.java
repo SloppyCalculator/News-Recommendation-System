@@ -17,7 +17,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import java.sql.Date;
+
+import java.sql.*;
 
 import java.io.File;
 import java.io.FileReader;
@@ -25,10 +26,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -113,12 +110,33 @@ public class AdmInMainController {
 
     }
 
-    public void deleteUser(User user){
-        userRepository = new UserRepository(databaseManager);
-        if(userRepository.deleteUserById(user.getUserID())){
-            System.out.println("User removed successfully");
+    // Deletes selected user form the database
+    public void deleteUser(User user) {
+        boolean confirmed = confirmAndDeleteUser(user);
+        if (confirmed) {
+            userRepository = new UserRepository(databaseManager);
+            if (userRepository.deleteUserById(user.getUserID())) {
+                showSuccessAlert("Success", "User "+user.getUsername() + " has been " +
+                        "deleted successfully");
+            }
+            onManageUsers(); // Refresh the list after deletion
         }
-        onManageUsers();
+    }
+
+    // Gets confirmation for deletion
+    private boolean confirmAndDeleteUser(User user) {
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Delete User");
+        confirmationAlert.setHeaderText("Are you sure you want to delete this user?");
+        confirmationAlert.setContentText("User: " + user.getUsername());
+
+        ButtonType deleteButton = new ButtonType("Delete");
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        confirmationAlert.getButtonTypes().setAll(deleteButton, cancelButton);
+
+        // Show the alert and wait for the user's response
+        return confirmationAlert.showAndWait().filter(response -> response == deleteButton).isPresent();
     }
 
     public void onManageArticles(){
@@ -180,13 +198,34 @@ public class AdmInMainController {
 
     }
 
-    public void deleteArticle(Article article){
-        userRepository = new UserRepository(databaseManager);
-        if(userRepository.deleteUserById(article.getId())){
-            System.out.println("Article removed successfully");
+    public void deleteArticle(Article article) {
+        boolean confirmed = confirmAndDeleteArticle(article);
+        if (confirmed) {
+            articleRepository = new ArticleRepository(databaseManager);
+            if (articleRepository.deleteArticle(article.getId())) {
+                showSuccessAlert("Success", "Article" + article.getTitle() +
+                        "deleted successfully");
+            }
+            onManageArticles(); // Refresh the list after deletion
         }
-        onManageArticles();
     }
+
+    private boolean confirmAndDeleteArticle(Article article) {
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Delete Article");
+        confirmationAlert.setHeaderText("Are you sure you want to delete this article?");
+        confirmationAlert.setContentText("Title: " + article.getTitle());
+
+        ButtonType deleteButton = new ButtonType("Delete");
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        confirmationAlert.getButtonTypes().setAll(deleteButton, cancelButton);
+
+        // Show the alert and wait for the user's response
+        return confirmationAlert.showAndWait().filter(response -> response == deleteButton).isPresent();
+    }
+
+
 
     public void onLoginButtonClick(ActionEvent event) throws IOException {
         admin = new Admin();
@@ -280,7 +319,15 @@ public class AdmInMainController {
         }
     }
 
+    // Checks validity of each record
+    private boolean isValidRow(String[] row) {
+        return row.length >= 5 &&
+                row[2] != null && !row[2].isEmpty() && // Validate `guid`
+                row[3] != null && row[3].startsWith("http") && // Validate URL format
+                row[0] != null && !row[0].isEmpty(); // Validate `title`
+    }
 
+    // Only takes in last 50 records to save computing time and also to manage api calls
     private List<String[]> readLast50Rows(String filePath) throws IOException {
         List<String[]> allRows = new ArrayList<>();
         try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
@@ -291,7 +338,7 @@ public class AdmInMainController {
                     isHeader = false;
                     continue;
                 }
-                if (row.length < 5) {
+                if (!isValidRow(row)) {
                     System.out.println("Skipping invalid row: " + String.join(",", row));
                     continue;
                 }
@@ -305,45 +352,71 @@ public class AdmInMainController {
     }
 
 
+    // Receives records and converts them to be added in the database
     private void loadToSQLiteWithConcurrency(List<String[]> data) throws SQLException {
         try (Connection conn = DriverManager.getConnection(DB_URL)) {
             if (conn != null) {
                 createTableIfNotExists(conn);
 
-                ExecutorService executorService = Executors.newFixedThreadPool(4); // Adjust the thread pool size
+                ExecutorService executorService = Executors.newFixedThreadPool(4);
                 String insertSQL = "INSERT INTO " + TABLE_NAME + " (title, pubDate, guid, link, description, category) VALUES (?, ?, ?, ?, ?, ?)";
 
                 for (String[] row : data) {
                     executorService.submit(() -> {
-                        try (PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
+                        try {
                             if (row.length < 5) {
-                                throw new RuntimeException("Invalid row format: " + String.join(",", row));
+                                Platform.runLater(() ->
+                                        System.out.println("Invalid row format, skipping: " + String.join(",", row))
+                                );
+                                return;
                             }
-                            String description = row[4];
-                            String category = ZeroShotClassification.categorizeDescription(description);
-                            String formattedDate = convertToSQLiteFormat(row[1]);
+                            // Checks duplicity by checking guids
+                            String guid = row[2]; // 'guid' is an unique column
+                            if (!isDuplicate(conn, guid)) { // checks if similar article is present
+                                try (PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
+                                    String description = row[4];
+                                    String category = ZeroShotClassification.categorizeDescription(description);
+                                    String formattedDate = convertToSQLiteFormat(row[1]);
 
-                            pstmt.setString(1, row[0]);
-                            pstmt.setString(2, formattedDate);
-                            pstmt.setString(3, row[2]);
-                            pstmt.setString(4, row[3]);
-                            pstmt.setString(5, description);
-                            pstmt.setString(6, category);
-                            pstmt.executeUpdate();
+                                    pstmt.setString(1, row[0]);
+                                    pstmt.setString(2, formattedDate);
+                                    pstmt.setString(3, guid);
+                                    pstmt.setString(4, row[3]);
+                                    pstmt.setString(5, description);
+                                    pstmt.setString(6, category);
+                                    pstmt.executeUpdate();
+
+                                    // Update UI if needed
+                                    Platform.runLater(() ->
+                                            System.out.println("Inserted row successfully: " + String.join(",", row))
+                                    );
+                                }
+                            } else {
+                                Platform.runLater(() ->
+                                        System.out.println("Duplicate found, skipping row: " + String.join(",", row))
+                                );
+                            }
                         } catch (SQLException e) {
                             e.printStackTrace();
+                            Platform.runLater(() ->
+                                    System.err.println("Error inserting row: " + e.getMessage())
+                            );
                         }
                     });
                 }
 
                 executorService.shutdown();
                 executorService.awaitTermination(1, TimeUnit.MINUTES); // Adjust timeout as needed
-                System.out.println("Data has been successfully loaded into the SQLite database.");
+                Platform.runLater(() ->
+                        showSuccessAlert("Success", "Data has been successfully loaded")
+                );
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
+
+
 
     private void createTableIfNotExists(Connection conn) throws SQLException {
         String createTableSQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
@@ -360,6 +433,7 @@ public class AdmInMainController {
         }
     }
 
+    // The data which day, date and time is converted to date and time
    private String convertToSQLiteFormat(String dateStr) {
         dateStr = dateStr.replace(",", "");
         SimpleDateFormat inputFormat = new SimpleDateFormat("EEE dd MMM yyyy HH:mm:ss z");
@@ -368,16 +442,16 @@ public class AdmInMainController {
             java.util.Date date = inputFormat.parse(dateStr);
             return outputFormat.format(date);
         } catch (ParseException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Date Conversion Error");
+            alert.setHeaderText("Invalid Date Format");
+            alert.setContentText("An error occurred while parsing the date: " + dateStr);
+            alert.showAndWait();
             throw new RuntimeException("Error parsing date: " + dateStr, e);
         }
     }
-    private Date convertToSQLFormat(String dateStr) {
-        String originalDateString = convertToSQLiteFormat(dateStr);
-        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime dateTime = LocalDateTime.parse(originalDateString, inputFormatter);
-        return Date.valueOf(dateTime.toLocalDate());
-    }
 
+    // shows an error
     private void showErrorAlert(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -392,6 +466,22 @@ public class AdmInMainController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
+
+    // Used for preventing duplicate articles
+    private boolean isDuplicate(Connection conn, String guid) throws SQLException {
+        String query = "SELECT COUNT(*) FROM " + TABLE_NAME + " WHERE guid = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, guid); // Set the GUID parameter
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.getInt(1) > 0; // Returns true if count > 0, indicating a duplicate
+            }
+        }
+    }
+
+
+
+
 
 }
 

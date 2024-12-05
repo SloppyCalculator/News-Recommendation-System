@@ -38,15 +38,15 @@ public class HelloController {
         stage.setScene(scene);
         stage.show();
     }
-
+    // On Login
     public void onLoginButtonClick(ActionEvent event) throws IOException {
         loadView(event, "login-view.fxml");
     }
-
+    // On SignUp
     public void onSignUpButtonClick(ActionEvent event) throws IOException {
         loadView(event, "register-view.fxml");
     }
-
+    // Logging as admin
     public void onAdminButtonClick(ActionEvent event) throws IOException {
         loadView(event, "admin-login-view.fxml");
     }

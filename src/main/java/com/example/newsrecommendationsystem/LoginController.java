@@ -34,7 +34,7 @@ public class LoginController {
             errorMessage.setText("Password cannot be empty");
             return; // Exit the method if password is empty
         }
-
+        // The user logs in if everything is ok
         User user = new User(username, password);
         if (userRepository.doesUsernameExist(user.getUsername())) {
             if (userRepository.authenticateUser(user.getUsername(), user.getPassword())) {

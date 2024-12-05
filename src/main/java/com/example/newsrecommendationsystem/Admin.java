@@ -10,12 +10,14 @@ import java.util.ArrayList;
 public class Admin implements Profile{
     private String username;
     private String password;
-    private static final String SALT = "RandomSaltForSecurity";
+    private static final String SALT = "RandomSaltForSecurity"; // Salt for hashing password
 
+    // Constructor
     public Admin(String username, String password) {
         this.username = username;
         this.password = hashPassword(password);
     }
+
 
     public Admin(){
         loadAdminCredentials();
@@ -51,6 +53,7 @@ public class Admin implements Profile{
         return "Admin{username='" + username + "'}";
     }
 
+    // Hashes password for security
     private String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -68,6 +71,7 @@ public class Admin implements Profile{
         }
     }
 
+    // get credentials stored in a file
     private void loadAdminCredentials() {
         try (BufferedReader reader = new BufferedReader(new FileReader("admin_credentials.txt"))) {
             String line;
@@ -83,6 +87,7 @@ public class Admin implements Profile{
         }
     }
 
+    // confirms entered password
     public boolean verifyPassword(String enteredPassword) {
         return this.password.equals(hashPassword(enteredPassword));
     }

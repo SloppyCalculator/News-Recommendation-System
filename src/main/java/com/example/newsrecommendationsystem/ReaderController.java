@@ -1,5 +1,6 @@
 package com.example.newsrecommendationsystem;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,6 +23,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class ReaderController {
 
@@ -129,10 +131,6 @@ public class ReaderController {
         });
     }
 
-
-
-
-
     private void readArticle(Article article) {
         // Implement the read action
         User user = userRepository.loadUserByUsername(userSession.getUsername());
@@ -142,6 +140,7 @@ public class ReaderController {
         openArticleWindow(article.getTitle(), content);
 
     }
+
 
     private void openArticleWindow(String title, String content) {
         // Create a new Stage (window)
