@@ -1,0 +1,4 @@
+When uploading a csv file as a admin, upload the bbc dataset which uploads frequently and do not change the
+any details in the file
+For the admin account, the password is admin
+API Calls are limited to 170 per day for categorization while loading articles
