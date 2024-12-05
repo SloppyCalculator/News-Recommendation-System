@@ -1,4 +1,4 @@
-package com.example.newsrecommendationsystem.Controller;
+package com.example.newsrecommendationsystem;
 
 import com.example.newsrecommendationsystem.HelloApplication;
 import javafx.event.ActionEvent;

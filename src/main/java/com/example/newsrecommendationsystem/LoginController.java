@@ -21,9 +21,20 @@ public class LoginController {
     @FXML
     protected Label errorMessage;
 
-    public void onLogin(ActionEvent event) throws IOException{
+    public void onLogin(ActionEvent event) throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
+
+        // Check if fields are null or empty
+        if (username == null || username.trim().isEmpty()) {
+            errorMessage.setText("Username cannot be empty");
+            return; // Exit the method if username is empty
+        }
+        if (password == null || password.trim().isEmpty()) {
+            errorMessage.setText("Password cannot be empty");
+            return; // Exit the method if password is empty
+        }
+
         User user = new User(username, password);
         if (userRepository.doesUsernameExist(user.getUsername())) {
             if (userRepository.authenticateUser(user.getUsername(), user.getPassword())) {
@@ -40,10 +51,12 @@ public class LoginController {
         } else {
             errorMessage.setText("Invalid Username. Register to log in");
         }
-
-        /*Check if username exists in database*/
-        /*Check if password correlates to existing password in database*/
     }
+
+
+    /*Check if username exists in database*/
+        /*Check if password correlates to existing password in database*/
+
 
     public void onCancel(ActionEvent event){
         usernameField.clear();

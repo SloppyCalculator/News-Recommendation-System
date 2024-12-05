@@ -53,7 +53,9 @@ public class RecommendedArticlesController {
         // Initialize userLabel with the current user's username
         UserSession session = UserSession.getInstance();
         userLabel.setText(session.getUsername());
-        logOut.setText("\u23FC");
+        logOut.setText("LOG OUT");
+        logOut.setPrefWidth(100.00);
+
         // Create RecommendationEngine object
         RecommendationEngine engine = new RecommendationEngine(articleRepository);
         engine.addArticlesToIndexConcurrently(); // Add articles to engine

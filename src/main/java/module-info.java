@@ -15,11 +15,12 @@ module com.example.newsrecommendationsystem {
     requires org.jsoup;
     requires lucene.core;
     requires lucene.queryparser;
+    requires java.desktop;
+    requires okhttp3;
 
     opens com.example.newsrecommendationsystem to javafx.fxml;
     exports com.example.newsrecommendationsystem;
-    exports com.example.newsrecommendationsystem.Controller;
-    opens com.example.newsrecommendationsystem.Controller to javafx.fxml;
+
 
 
 }

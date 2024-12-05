@@ -48,7 +48,8 @@ public class ReaderController {
         // Initialize userLabel with the current user's username
         UserSession session = UserSession.getInstance();
         userLabel.setText(session.getUsername());
-        logOut.setText("\u23FC");
+        logOut.setText("LOG OUT");
+        logOut.setPrefWidth(100.00);
 
         UserRepository userRepository = new UserRepository(new DatabaseManager());
         User user = userRepository.loadUserByUsername(session.getUsername());
